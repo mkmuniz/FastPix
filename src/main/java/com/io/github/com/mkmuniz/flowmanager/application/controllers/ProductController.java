@@ -1,4 +1,4 @@
-package com.io.github.com.mkmuniz.flowmanager.application;
+package com.io.github.com.mkmuniz.flowmanager.application.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,5 +31,4 @@ public class ProductController {
     public Product postMethodName(@RequestBody Product entity) {
         return productServicePort.save(entity);
     }
-    
 }
