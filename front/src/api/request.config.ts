@@ -1,5 +1,9 @@
 import axios, { AxiosError } from 'axios';
 
+interface ApiErrorResponse {
+  message: string;
+}
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 export const api = axios.create({
@@ -9,7 +13,7 @@ export const api = axios.create({
   },
 });
 
-export const handleApiError = (error: AxiosError): never => {
+export const handleApiError = (error: AxiosError<ApiErrorResponse>): never => {
   const errorMessage = error.response?.data?.message || 'Ocorreu um erro na requisição';
   throw new Error(errorMessage);
 };
