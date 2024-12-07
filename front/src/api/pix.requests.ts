@@ -37,7 +37,10 @@ export const pixService = {
       const response = await api.get<QRCodeResponse>(`/api/pix/${pixId}/qrcode`);
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      if (error instanceof AxiosError) {
+        return handleApiError(error);
+      }
+      throw error;
     }
   }
 };
