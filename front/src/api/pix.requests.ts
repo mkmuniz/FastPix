@@ -1,4 +1,5 @@
 import { api, handleApiError } from './request.config';
+import axios, { AxiosError } from 'axios';
 
 interface PixCreateRequest {
   value: number;
@@ -24,7 +25,10 @@ export const pixService = {
       const response = await api.post<PixResponse>('/api/pix', data);
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      if (error instanceof AxiosError) {
+        return handleApiError(error);
+      }
+      throw error;
     }
   },
 

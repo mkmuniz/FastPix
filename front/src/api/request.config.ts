@@ -9,7 +9,7 @@ export const api = axios.create({
   },
 });
 
-export const handleApiError = (error: AxiosError) => {
+export const handleApiError = (error: AxiosError): never => {
   const errorMessage = error.response?.data?.message || 'Ocorreu um erro na requisição';
   throw new Error(errorMessage);
 };
