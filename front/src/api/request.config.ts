@@ -9,6 +9,8 @@ export const api = axios.create({
   },
 });
 
+// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const handleApiError = (error: any) => {
   const errorMessage = error.response?.data?.message || 'Ocorreu um erro na requisição';
   throw new Error(errorMessage);
