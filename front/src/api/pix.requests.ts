@@ -1,5 +1,5 @@
 import { api, handleApiError } from './request.config';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 
 interface PixCreateRequest {
   value: number;
