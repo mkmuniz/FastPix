@@ -6,15 +6,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class FlowmanagerApplication {
+public class FastPixApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FlowmanagerApplication.class, args);
+		SpringApplication.run(FastPixApplication.class, args);
 	}
 
 	@Bean
 	public ModelMapper modelMapper() {
-		ModelMapper modelMapper = new ModelMapper();
-		return modelMapper;
+		return new ModelMapper();
 	}
 }
