@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { pixService } from '../api/pix.requests';
 
@@ -8,14 +8,17 @@ export default function PixForm() {
     pixKey: '',
     value: '',
     description: '',
-    userId: '1'
+    userId: '1',
+    state: '',
+    city: ''
   });
   const [qrCodeData, setQrCodeData] = useState({
     text: '',
     image: ''
   });
   const [loading, setLoading] = useState(false);
-
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -31,7 +34,9 @@ export default function PixForm() {
         pixKey: formData.pixKey,
         value: parseFloat(formData.value),
         description: formData.description || '',
-        userId: parseInt(formData.userId)
+        userId: parseInt(formData.userId),
+        state: formData.state,
+        city: formData.city
       });
 
       const qrCodeResponse = await pixService.generateQRCode(pixResponse.id);
@@ -51,6 +56,25 @@ export default function PixForm() {
       setLoading(false);
     }
   };
+
+  const getStates = async () => {
+    const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados');
+    const data = await response.json();
+
+    setStates(data);
+  }
+  
+  const getCities = async () => {
+    const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/distritos');
+    const data = await response.json();
+
+    setCities(data);
+  }
+
+  useEffect(() => {
+    getStates();
+    getCities();
+  }, []);
 
   return (
     <div className="bg-white rounded-lg shadow-xl overflow-hidden">
@@ -73,6 +97,40 @@ export default function PixForm() {
                 placeholder="Digite a chave Pix"
                 required
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Estado *
+              </label>
+              <select
+                value={formData.state}
+                onChange={(e) => setFormData({...formData, state: e.target.value})}
+                className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                required
+              >
+                <option value="">Selecione um estado</option>
+                {states.map((state) => (
+                  <option key={state.id} value={state.sigla}>{state.nome}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Cidade *
+              </label>
+              <select
+                value={formData.city}
+                onChange={(e) => setFormData({...formData, city: e.target.value})}
+                className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                required
+              >
+                <option value="">Selecione uma cidade</option>
+                {cities.filter((city) => city.municipio.microrregiao.mesorregiao.UF.sigla === formData.state).map((city) => (
+                  <option key={city.id} value={city.nome}>{city.nome}</option>
+                ))}
+              </select>
             </div>
 
             <div>

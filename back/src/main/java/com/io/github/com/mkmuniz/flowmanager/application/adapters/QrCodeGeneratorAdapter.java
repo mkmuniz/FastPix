@@ -63,7 +63,7 @@ public class QrCodeGeneratorAdapter implements QrCodeGeneratorPort {
         
         // Cidade
         sb.append("60");
-        String city = "SAO PAULO";
+        String city = pix.getCity();
         sb.append(String.format("%02d%s", city.length(), city));
         
         // Additional Data Field

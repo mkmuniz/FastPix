@@ -6,6 +6,8 @@ interface CreatePixRequest {
   description: string;
   pixKey: string;
   userId: number;
+  state: string;
+  city: string;
 }
 
 interface PixResponse {
