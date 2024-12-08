@@ -26,6 +26,8 @@ public class PixController {
             request.pixKey(),
             request.value(),
             request.description(),
+            request.state(),
+            request.city(),
             request.userId()
         );
         

@@ -11,11 +11,13 @@ public class PixMapper {
     
     public Pix toDomain(PixEntity entity) {
         if (entity == null) return null;
-        
+
         Pix pix = new Pix.Builder()
             .withPixKey(entity.getPixKey())
             .withValue(entity.getValue())
             .withDescription(entity.getDescription())
+            .withState(entity.getState())
+            .withCity(entity.getCity())
             .withUserId(entity.getUser() != null ? entity.getUser().getId() : null)
             .build();
         

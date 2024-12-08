@@ -54,6 +54,16 @@ public class Pix {
             return this;
         }
 
+        public Builder withState(String state) {
+            pix.state = state;
+            return this;
+        }
+
+        public Builder withCity(String city) {
+            pix.city = city;
+            return this;
+        }
+
         public Pix build() {
             validatePix();
             return pix;

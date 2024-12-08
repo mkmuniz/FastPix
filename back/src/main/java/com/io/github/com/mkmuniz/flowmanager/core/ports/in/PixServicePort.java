@@ -26,6 +26,8 @@ public interface PixServicePort {
         String pixKey,
         BigDecimal value,
         String description,
+        String state,
+        String city,
         Long userId
     ) {
         public CreatePixCommand {
@@ -45,6 +47,8 @@ public interface PixServicePort {
                 .withPixKey(pixKey)
                 .withValue(value)
                 .withDescription(description)
+                .withState(state)
+                .withCity(city)
                 .withUserId(userId)
                 .build();
         }
