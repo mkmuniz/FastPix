@@ -22,3 +22,9 @@ CREATE TABLE pix (
     state VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE qr_codes (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    text TEXT,
+    image TEXT
+);

@@ -1,10 +1,11 @@
 package com.io.github.com.mkmuniz.flowmanager.application.controllers;
 
 import com.io.github.com.mkmuniz.flowmanager.core.domain.Pix;
+import com.io.github.com.mkmuniz.flowmanager.core.domain.commands.CreatePixCommand;
+import com.io.github.com.mkmuniz.flowmanager.core.domain.QrCode;
 import com.io.github.com.mkmuniz.flowmanager.core.ports.in.PixServiceException;
 import com.io.github.com.mkmuniz.flowmanager.core.ports.in.PixServicePort;
-import com.io.github.com.mkmuniz.flowmanager.core.ports.in.PixServicePort.CreatePixCommand;
-
+import com.io.github.com.mkmuniz.flowmanager.core.ports.in.QrCodeServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/pix")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000, https://fast-pix.onrender.com")
 public class PixController {
     
     private final PixServicePort pixService;
+    private final QrCodeServicePort qrCodeService;
 
     @PostMapping
     public ResponseEntity<Pix> createPix(@RequestBody CreatePixRequest request) {
@@ -27,8 +29,7 @@ public class PixController {
             request.value(),
             request.description(),
             request.state(),
-            request.city(),
-            request.userId()
+            request.city()
         );
         
         Pix pix = pixService.createPix(command);
@@ -47,11 +48,6 @@ public class PixController {
         return ResponseEntity.ok(pixService.findAllPix());
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Pix>> getPixByUserId(@PathVariable Long userId) {
-        return ResponseEntity.ok(pixService.findPixByUserId(userId));
-    }
-
     @PostMapping("/{id}/confirm")
     public ResponseEntity<Void> confirmPayment(@PathVariable Long id) {
         pixService.confirmPayment(id);
@@ -65,9 +61,9 @@ public class PixController {
     }
 
     @PostMapping("/{id}/qrcode")
-    public ResponseEntity<Void> generateQrCode(@PathVariable Long id) {
-        pixService.generateQrCode(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<QrCode> generateQrCode(@PathVariable Long id) {
+        QrCode qrCode = qrCodeService.generateQrCode(id);
+        return ResponseEntity.ok(qrCode);
     }
 
     @ExceptionHandler(PixServiceException.PixNotFoundException.class)

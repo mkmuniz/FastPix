@@ -10,6 +10,5 @@ import java.util.List;
 
 @Repository
 public interface PixRepository extends JpaRepository<PixEntity, Long> {
-    List<PixEntity> findByUserId(Long userId);
     List<PixEntity> findByStatus(PixStatus status);
 }

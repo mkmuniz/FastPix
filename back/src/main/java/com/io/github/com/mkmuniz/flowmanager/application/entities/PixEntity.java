@@ -61,10 +61,6 @@ public class PixEntity {
     @Column(name = "confirmed_at")
     private LocalDateTime confirmedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
-
     @Column(name = "city")
     private String city;
 
@@ -77,7 +73,6 @@ public class PixEntity {
         status = PixStatus.PENDING;
     }
 
-    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     
@@ -104,9 +99,6 @@ public class PixEntity {
     
     public LocalDateTime getConfirmedAt() { return confirmedAt; }
     public void setConfirmedAt(LocalDateTime confirmedAt) { this.confirmedAt = confirmedAt; }
-    
-    public UserEntity getUser() { return user; }
-    public void setUser(UserEntity user) { this.user = user; }
     
     public String getCity() { return city; }
     public void setCity(String city) { this.city = city; }

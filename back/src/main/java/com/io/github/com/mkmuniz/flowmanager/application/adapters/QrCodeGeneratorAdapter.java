@@ -12,17 +12,18 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import com.io.github.com.mkmuniz.flowmanager.core.domain.Pix;
-import com.io.github.com.mkmuniz.flowmanager.core.ports.out.QrCodeGeneratorPort;
+import com.io.github.com.mkmuniz.flowmanager.core.domain.QrCode;
+import com.io.github.com.mkmuniz.flowmanager.core.ports.out.QrCodeGeneratorRepositoryPort;
 
 @Component
-public class QrCodeGeneratorAdapter implements QrCodeGeneratorPort {
+public class QrCodeGeneratorAdapter implements QrCodeGeneratorRepositoryPort {
     
     @Override
-    public void generateQrCode(Pix pix) {
+    public QrCode generateQrCode(Pix pix) {
         try {
             String qrCodeText = generatePixQrCodeText(pix);
             String qrCodeImage = generateQrCodeImage(qrCodeText);
-            pix.updateQrCode(qrCodeText, qrCodeImage);
+            return new QrCode(qrCodeText, qrCodeImage);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao gerar QR Code", e);
         }

@@ -1,9 +1,8 @@
-package com.io.github.com.mkmuniz.flowmanager.application.repository;
+package com.io.github.com.mkmuniz.flowmanager.application.mapper;
 
 import org.springframework.stereotype.Component;
 
 import com.io.github.com.mkmuniz.flowmanager.application.entities.PixEntity;
-import com.io.github.com.mkmuniz.flowmanager.application.entities.UserEntity;
 import com.io.github.com.mkmuniz.flowmanager.core.domain.Pix;
 
 @Component
@@ -18,7 +17,6 @@ public class PixMapper {
             .withDescription(entity.getDescription())
             .withState(entity.getState())
             .withCity(entity.getCity())
-            .withUserId(entity.getUser() != null ? entity.getUser().getId() : null)
             .build();
         
         pix.setId(entity.getId());
@@ -32,6 +30,7 @@ public class PixMapper {
 
     public PixEntity toEntity(Pix domain) {
         if (domain == null) return null;
+        
         PixEntity entity = new PixEntity();
         entity.setId(domain.getId());
         entity.setPixKey(domain.getPixKey());
@@ -44,12 +43,6 @@ public class PixMapper {
         entity.setConfirmedAt(domain.getConfirmedAt());
         entity.setCity(domain.getCity());
         entity.setState(domain.getState());
-        
-        if (domain.getUserId() != null) {
-            UserEntity user = new UserEntity();
-            user.setId(domain.getUserId());
-            entity.setUser(user);
-        }
         
         return entity;
     }

@@ -1,15 +1,17 @@
 package com.io.github.com.mkmuniz.flowmanager.application.repository;
 
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.io.github.com.mkmuniz.flowmanager.application.entities.PixEntity;
-import com.io.github.com.mkmuniz.flowmanager.core.domain.Pix;
-import com.io.github.com.mkmuniz.flowmanager.core.domain.PixStatus;
 import com.io.github.com.mkmuniz.flowmanager.core.ports.out.PixRepositoryPort;
+import com.io.github.com.mkmuniz.flowmanager.application.entities.PixEntity;
+import com.io.github.com.mkmuniz.flowmanager.application.mapper.PixMapper;
+import com.io.github.com.mkmuniz.flowmanager.core.domain.PixStatus;
+import com.io.github.com.mkmuniz.flowmanager.core.domain.Pix;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,13 +37,6 @@ public class PixRepositoryAdapter implements PixRepositoryPort {
     @Override
     public List<Pix> findAll() {
         return pixRepository.findAll().stream()
-            .map(pixMapper::toDomain)
-            .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Pix> findByUserId(Long userId) {
-        return pixRepository.findByUserId(userId).stream()
             .map(pixMapper::toDomain)
             .collect(Collectors.toList());
     }

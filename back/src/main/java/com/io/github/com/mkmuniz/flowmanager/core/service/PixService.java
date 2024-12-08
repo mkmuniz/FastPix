@@ -2,11 +2,12 @@ package com.io.github.com.mkmuniz.flowmanager.core.service;
 
 import com.io.github.com.mkmuniz.flowmanager.core.domain.Pix;
 import com.io.github.com.mkmuniz.flowmanager.core.domain.PixStatus;
+import com.io.github.com.mkmuniz.flowmanager.core.domain.QrCode;
 import com.io.github.com.mkmuniz.flowmanager.core.ports.in.PixServiceException;
 import com.io.github.com.mkmuniz.flowmanager.core.ports.in.PixServicePort;
-import com.io.github.com.mkmuniz.flowmanager.core.ports.out.NotificationPort;
+import com.io.github.com.mkmuniz.flowmanager.core.domain.commands.CreatePixCommand;
 import com.io.github.com.mkmuniz.flowmanager.core.ports.out.PixRepositoryPort;
-import com.io.github.com.mkmuniz.flowmanager.core.ports.out.QrCodeGeneratorPort;
+import com.io.github.com.mkmuniz.flowmanager.core.ports.out.QrCodeGeneratorRepositoryPort;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,7 @@ import java.util.Optional;
 public class PixService implements PixServicePort {
     
     private final PixRepositoryPort pixRepository;
-    private final QrCodeGeneratorPort qrCodeGenerator;
-    private final NotificationPort notificationPort;
+    private final QrCodeGeneratorRepositoryPort qrCodeGeneratorRepository;
 
     @Override
     @Transactional
@@ -29,8 +29,9 @@ public class PixService implements PixServicePort {
         Pix pix = command.toDomain();
         pix = pixRepository.save(pix);
         
-        qrCodeGenerator.generateQrCode(pix);
-        notificationPort.notifyPixCreated(pix);
+        QrCode qrCode = qrCodeGeneratorRepository.generateQrCode(pix);
+        pix.updateQrCode(qrCode.getText(), qrCode.getImage());
+        pixRepository.save(pix);
         
         return pix;
     }
@@ -46,18 +47,12 @@ public class PixService implements PixServicePort {
     }
 
     @Override
-    public List<Pix> findPixByUserId(Long userId) {
-        return pixRepository.findByUserId(userId);
-    }
-
-    @Override
     @Transactional
     public void confirmPayment(Long pixId) {
         Pix pix = getPix(pixId);
         pix.confirm();
         
         pixRepository.save(pix);
-        notificationPort.notifyPixConfirmed(pix);
     }
 
     @Override
@@ -67,7 +62,6 @@ public class PixService implements PixServicePort {
         pix.cancel();
         
         pixRepository.save(pix);
-        notificationPort.notifyPixCancelled(pix);
     }
 
     @Override
@@ -76,15 +70,6 @@ public class PixService implements PixServicePort {
         Pix pix = getPix(pixId);
         pix.expire();
         
-        pixRepository.save(pix);
-        notificationPort.notifyPixExpired(pix);
-    }
-
-    @Override
-    @Transactional
-    public void generateQrCode(Long pixId) {
-        Pix pix = getPix(pixId);
-        qrCodeGenerator.generateQrCode(pix);
         pixRepository.save(pix);
     }
 

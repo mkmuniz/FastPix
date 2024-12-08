@@ -6,7 +6,6 @@ public record CreatePixRequest(
     String pixKey,
     BigDecimal value,
     String description,
-    Long userId,
     String state,
     String city
 ) {} 

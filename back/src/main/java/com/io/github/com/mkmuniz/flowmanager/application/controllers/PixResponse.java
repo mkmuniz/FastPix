@@ -15,7 +15,6 @@ public record PixResponse(
     String qrCodeImage,
     LocalDateTime createdAt,
     LocalDateTime confirmedAt,
-    Long userId,
     String state,
     String city
 ) {
@@ -30,7 +29,6 @@ public record PixResponse(
             pix.getQrCodeImage(),
             pix.getCreatedAt(),
             pix.getConfirmedAt(),
-            pix.getUserId(),
             pix.getState(),
             pix.getCity()
         );

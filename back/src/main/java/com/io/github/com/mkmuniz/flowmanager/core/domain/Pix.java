@@ -13,7 +13,6 @@ public class Pix {
     private String qrCodeImage;
     private LocalDateTime createdAt;
     private LocalDateTime confirmedAt;
-    private Long userId;
     private String city;
     private String state;
 
@@ -55,11 +54,6 @@ public class Pix {
 
         public Builder withDescription(String description) {
             pix.description = description;
-            return this;
-        }
-
-        public Builder withUserId(Long userId) {
-            pix.userId = userId;
             return this;
         }
 
@@ -160,11 +154,7 @@ public class Pix {
     public void setConfirmedAt(LocalDateTime confirmedAt) {
         this.confirmedAt = confirmedAt;
     }
-
-    public Long getUserId() {
-        return userId;
-    }
-
+    
     public String getCity() {
         return city != null ? city : "SAO PAULO";
     }
