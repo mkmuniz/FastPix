@@ -6,12 +6,13 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import org.springframework.stereotype.Component;
+import java.io.ByteArrayOutputStream;
+import java.util.Base64;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import com.io.github.com.mkmuniz.flowmanager.core.domain.Pix;
 import com.io.github.com.mkmuniz.flowmanager.core.ports.out.QrCodeGeneratorPort;
-
-import java.io.ByteArrayOutputStream;
-import java.util.Base64;
 
 @Component
 public class QrCodeGeneratorAdapter implements QrCodeGeneratorPort {
@@ -19,13 +20,8 @@ public class QrCodeGeneratorAdapter implements QrCodeGeneratorPort {
     @Override
     public void generateQrCode(Pix pix) {
         try {
-            // Gera o texto do QR code
             String qrCodeText = generatePixQrCodeText(pix);
-            
-            // Gera a imagem do QR code
             String qrCodeImage = generateQrCodeImage(qrCodeText);
-            
-            // Atualiza o Pix com os dados do QR code
             pix.updateQrCode(qrCodeText, qrCodeImage);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao gerar QR Code", e);
@@ -33,17 +29,69 @@ public class QrCodeGeneratorAdapter implements QrCodeGeneratorPort {
     }
     
     private String generatePixQrCodeText(Pix pix) {
-        // Formato do Pix dinâmico conforme manual do Bacen
         StringBuilder sb = new StringBuilder();
-        sb.append("00020126"); // Payload Format Indicator e Merchant Account Information
-        sb.append("5303986"); // Moeda BRL (986)
-        sb.append(String.format("54%02d%s", pix.getValue().toString().length(), pix.getValue().toString().replace(".", "")));
-        sb.append("5802BR"); // País BR
-        sb.append(String.format("59%02d%s", pix.getDescription().length(), pix.getDescription()));
-        sb.append(String.format("62%02d%s", pix.getPixKey().length(), pix.getPixKey()));
-        sb.append("6304"); // CRC16
+        
+        // Payload Format Indicator
+        sb.append("000201");
+        
+        // Merchant Account Information
+        sb.append("26");
+        String merchantAccountInfo = String.format(
+            "0014BR.GOV.BCB.PIX01%02d%s",
+            pix.getPixKey().length(),
+            pix.getPixKey()
+        );
+        sb.append(String.format("%02d%s", merchantAccountInfo.length(), merchantAccountInfo));
+        
+        // Moeda
+        sb.append("5303986");
+        
+        // Valor da transação
+        DecimalFormat df = new DecimalFormat("0.00");
+        String amount = df.format(pix.getValue());
+        sb.append(String.format("54%02d%s", amount.length(), amount));
+        
+        // País
+        sb.append("5802BR");
+        
+        // Nome do beneficiário
+        String receiverName = pix.getDescription();
+        if (receiverName.length() > 25) {
+            receiverName = receiverName.substring(0, 25);
+        }
+        sb.append(String.format("59%02d%s", receiverName.length(), receiverName));
+        
+        // Cidade
+        sb.append("60");
+        String city = "SAO PAULO";
+        sb.append(String.format("%02d%s", city.length(), city));
+        
+        // Additional Data Field
+        sb.append("6304");
+        
+        // CRC16
+        String crc16 = calculateCRC16(sb.toString());
+        sb.append(crc16);
         
         return sb.toString();
+    }
+    
+    private String calculateCRC16(String qrCode) {
+        int polynom = 0x1021;
+        int crc = 0xFFFF;
+        
+        for (int i = 0; i < qrCode.length(); i++) {
+            crc ^= (qrCode.charAt(i) << 8);
+            for (int j = 0; j < 8; j++) {
+                if ((crc & 0x8000) != 0) {
+                    crc = ((crc << 1) ^ polynom) & 0xFFFF;
+                } else {
+                    crc = (crc << 1) & 0xFFFF;
+                }
+            }
+        }
+        
+        return String.format("%04X", crc & 0xFFFF).toUpperCase();
     }
     
     private String generateQrCodeImage(String content) throws WriterException {
