@@ -68,17 +68,12 @@ public class PixEntity {
     @Column(name = "city")
     private String city;
 
+    @Column(name = "state")
+    private String state;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         status = PixStatus.PENDING;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 }

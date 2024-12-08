@@ -18,6 +18,8 @@ CREATE TABLE pix (
     created_at TIMESTAMP NOT NULL,
     confirmed_at TIMESTAMP,
     user_id BIGINT,
+    city VARCHAR(255),
+    state VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 

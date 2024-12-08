@@ -15,6 +15,7 @@ public class Pix {
     private LocalDateTime confirmedAt;
     private Long userId;
     private String city;
+    private String state;
 
     private Pix() {}
 
@@ -62,13 +63,13 @@ public class Pix {
             return this;
         }
 
-        public Builder withState(String state) {
-            pix.state = state;
+        public Builder withCity(String city) {
+            pix.city = city;
             return this;
         }
 
-        public Builder withCity(String city) {
-            pix.city = city;
+        public Builder withState(String state) {
+            pix.state = state;
             return this;
         }
 
@@ -166,5 +167,9 @@ public class Pix {
 
     public String getCity() {
         return city != null ? city : "SAO PAULO";
+    }
+
+    public String getState() {
+        return state;
     }
 }

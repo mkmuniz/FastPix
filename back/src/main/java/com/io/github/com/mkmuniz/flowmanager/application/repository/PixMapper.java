@@ -43,6 +43,7 @@ public class PixMapper {
         entity.setCreatedAt(domain.getCreatedAt());
         entity.setConfirmedAt(domain.getConfirmedAt());
         entity.setCity(domain.getCity());
+        entity.setState(domain.getState());
         
         if (domain.getUserId() != null) {
             UserEntity user = new UserEntity();
