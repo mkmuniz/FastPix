@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/pix")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000", "https://fast-pix.vercel.app"}, allowedHeaders = "*")
+@CrossOrigin(origins = "*")
 public class PixController {
     
     private final PixServicePort pixService;

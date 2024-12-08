@@ -1,9 +1,11 @@
 import { api, handleApiError } from './request.config';
 import { AxiosError } from 'axios';
 
-interface PixCreateRequest {
+interface CreatePixRequest {
   value: number;
-  description?: string;
+  description: string;
+  pixKey: string;
+  userId: number;
 }
 
 interface PixResponse {
@@ -20,7 +22,7 @@ interface QRCodeResponse {
 }
 
 export const pixService = {
-  async createPix(data: PixCreateRequest): Promise<PixResponse> {
+  async createPix(data: CreatePixRequest): Promise<PixResponse> {
     try {
       const response = await api.post<PixResponse>('/api/pix', data);
       return response.data;
@@ -34,7 +36,7 @@ export const pixService = {
 
   async generateQRCode(pixId: string): Promise<QRCodeResponse> {
     try {
-      const response = await api.get<QRCodeResponse>(`/api/pix/${pixId}/qrcode`);
+      const response = await api.post<QRCodeResponse>(`/api/pix/${pixId}/qrcode`);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

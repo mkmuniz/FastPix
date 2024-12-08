@@ -27,16 +27,11 @@ module.exports = {
             opacity: '1',
             transform: 'translateY(0)'
           },
-        },
-        'pulse-ring': {
-          '0%': { transform: 'scale(0.8)', opacity: '0.5' },
-          '100%': { transform: 'scale(1.1)', opacity: '0' },
         }
       },
       animation: {
         'fade-in-down': 'fade-in-down 0.5s ease-out',
-        'fade-in-up': 'fade-in-up 0.5s ease-out',
-        'pulse-ring': 'pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+        'fade-in-up': 'fade-in-up 0.5s ease-out'
       }
     },
   },
