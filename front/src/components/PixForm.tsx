@@ -36,8 +36,10 @@ export default function PixForm() {
 
       const qrCodeResponse = await pixService.generateQRCode(pixResponse.id);
 
+      console.log('QR Code Response:', qrCodeResponse);
+
       setQrCodeData({
-        text: qrCodeResponse.qrCodeData,
+        text: qrCodeResponse.qrCodeText,
         image: qrCodeResponse.qrCodeImage
       });
       
@@ -67,7 +69,7 @@ export default function PixForm() {
                 type="text"
                 value={formData.pixKey}
                 onChange={(e) => setFormData({...formData, pixKey: e.target.value})}
-                className="mt-1 block w-full rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="Digite a chave Pix"
                 required
               />
@@ -82,7 +84,7 @@ export default function PixForm() {
                 step="0.01"
                 value={formData.value}
                 onChange={(e) => setFormData({...formData, value: e.target.value})}
-                className="mt-1 block w-full rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="0,00"
                 required
               />
@@ -95,7 +97,7 @@ export default function PixForm() {
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
-                className="mt-1 block w-full rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="Descrição da cobrança (opcional)"
                 rows={3}
               />
@@ -117,7 +119,9 @@ export default function PixForm() {
           <div className="mt-8 text-center">
             <div className="mb-4 p-4 bg-gray-50 rounded-lg inline-block">
               <img
-                src={qrCodeData.image}
+                src={qrCodeData.image.startsWith('data:image') 
+                  ? qrCodeData.image 
+                  : `data:image/png;base64,${qrCodeData.image}`}
                 alt="QR Code Pix"
                 className="mx-auto w-48 h-48"
               />

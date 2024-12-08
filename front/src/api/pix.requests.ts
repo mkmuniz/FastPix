@@ -17,7 +17,7 @@ interface PixResponse {
 }
 
 interface QRCodeResponse {
-  qrCodeData: string;
+  qrCodeText: string;
   qrCodeImage: string;
 }
 
@@ -36,8 +36,19 @@ export const pixService = {
 
   async generateQRCode(pixId: string): Promise<QRCodeResponse> {
     try {
-      const response = await api.post<QRCodeResponse>(`/api/pix/${pixId}/qrcode`);
-      return response.data;
+      await api.post(`/api/pix/${pixId}/qrcode`);
+      
+      const pixResponse = await api.get<{
+        qrCodeText: string;
+        qrCodeImage: string;
+      }>(`/api/pix/${pixId}`);
+
+      const qrCodeImage = pixResponse.data.qrCodeImage.replace(/^data:image\/[a-z]+;base64,/, '');
+
+      return {
+        qrCodeText: pixResponse.data.qrCodeText,
+        qrCodeImage: qrCodeImage
+      };
     } catch (error) {
       if (error instanceof AxiosError) {
         return handleApiError(error);
