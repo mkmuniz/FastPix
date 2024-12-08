@@ -14,8 +14,16 @@ public class Pix {
     private LocalDateTime createdAt;
     private LocalDateTime confirmedAt;
     private Long userId;
+    private String city;
 
     private Pix() {}
+
+    public Pix(String pixKey, BigDecimal value, String description, String city) {
+        this.pixKey = pixKey;
+        this.value = value;
+        this.description = description;
+        this.city = city;
+    }
 
     public void updateQrCode(String qrCodeText, String qrCodeImage) {
         this.qrCodeText = qrCodeText;
@@ -154,5 +162,9 @@ public class Pix {
 
     public Long getUserId() {
         return userId;
+    }
+
+    public String getCity() {
+        return city != null ? city : "SAO PAULO";
     }
 }

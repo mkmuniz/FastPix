@@ -19,4 +19,6 @@ CREATE TABLE pix (
     confirmed_at TIMESTAMP,
     user_id BIGINT,
     FOREIGN KEY (user_id) REFERENCES users(id)
-); 
+);
+
+ALTER TABLE pix ADD COLUMN IF NOT EXISTS city VARCHAR(255); 

@@ -65,9 +65,20 @@ public class PixEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    @Column(name = "city")
+    private String city;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         status = PixStatus.PENDING;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

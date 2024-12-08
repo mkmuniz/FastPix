@@ -42,6 +42,7 @@ public class PixMapper {
         entity.setQrCodeImage(domain.getQrCodeImage());
         entity.setCreatedAt(domain.getCreatedAt());
         entity.setConfirmedAt(domain.getConfirmedAt());
+        entity.setCity(domain.getCity());
         
         if (domain.getUserId() != null) {
             UserEntity user = new UserEntity();
