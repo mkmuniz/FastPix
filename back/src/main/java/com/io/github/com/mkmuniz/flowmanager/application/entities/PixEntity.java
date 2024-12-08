@@ -76,4 +76,41 @@ public class PixEntity {
         createdAt = LocalDateTime.now();
         status = PixStatus.PENDING;
     }
+
+    // Getters e Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public String getPixKey() { return pixKey; }
+    public void setPixKey(String pixKey) { this.pixKey = pixKey; }
+    
+    public BigDecimal getValue() { return value; }
+    public void setValue(BigDecimal value) { this.value = value; }
+    
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    
+    public PixStatus getStatus() { return status; }
+    public void setStatus(PixStatus status) { this.status = status; }
+    
+    public String getQrCodeText() { return qrCodeText; }
+    public void setQrCodeText(String qrCodeText) { this.qrCodeText = qrCodeText; }
+    
+    public String getQrCodeImage() { return qrCodeImage; }
+    public void setQrCodeImage(String qrCodeImage) { this.qrCodeImage = qrCodeImage; }
+    
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    
+    public LocalDateTime getConfirmedAt() { return confirmedAt; }
+    public void setConfirmedAt(LocalDateTime confirmedAt) { this.confirmedAt = confirmedAt; }
+    
+    public UserEntity getUser() { return user; }
+    public void setUser(UserEntity user) { this.user = user; }
+    
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
+    
+    public String getState() { return state; }
+    public void setState(String state) { this.state = state; }
 }

@@ -22,5 +22,3 @@ CREATE TABLE pix (
     state VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
-
-ALTER TABLE pix ADD COLUMN IF NOT EXISTS city VARCHAR(255); 

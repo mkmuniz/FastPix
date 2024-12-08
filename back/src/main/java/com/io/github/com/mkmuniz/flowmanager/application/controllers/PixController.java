@@ -89,13 +89,6 @@ public class PixController {
     }
 }
 
-record CreatePixRequest(
-    String pixKey,
-    java.math.BigDecimal value,
-    String description,
-    Long userId
-) {}
-
 record ErrorResponse(
     String message
 ) {}
