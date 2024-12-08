@@ -1,6 +1,7 @@
 "use client"
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { pixService } from '../api/pix.requests';
 
 export default function PixForm() {
   const [formData, setFormData] = useState({
@@ -25,39 +26,19 @@ export default function PixForm() {
 
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:8080/api/pix', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          pixKey: formData.pixKey,
-          value: parseFloat(formData.value),
-          description: formData.description || undefined,
-          userId: parseInt(formData.userId)
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao criar Pix');
-      }
-
-      const data = await response.json();
       
-      const qrResponse = await fetch(`http://localhost:8080/api/pix/${data.id}/qrcode`, {
-        method: 'POST'
+      const pixResponse = await pixService.createPix({
+        pixKey: formData.pixKey,
+        value: parseFloat(formData.value),
+        description: formData.description || '',
+        userId: parseInt(formData.userId)
       });
 
-      if (!qrResponse.ok) {
-        throw new Error('Erro ao gerar QR Code');
-      }
-
-      const pixResponse = await fetch(`http://localhost:8080/api/pix/${data.id}`);
-      const pixData = await pixResponse.json();
+      const qrCodeResponse = await pixService.generateQRCode(pixResponse.id);
 
       setQrCodeData({
-        text: pixData.qrCodeText,
-        image: pixData.qrCodeImage
+        text: qrCodeResponse.qrCodeData,
+        image: qrCodeResponse.qrCodeImage
       });
       
       toast.success('Pix criado e QR Code gerado com sucesso!');
