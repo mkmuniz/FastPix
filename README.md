@@ -31,8 +31,6 @@ O projeto segue uma arquitetura moderna e distribuída:
 - Estilização com Tailwind CSS para UI responsiva
 
 ### Backend
-- Arquitetura REST
+- Arquitetura Hexagonal
 - Implementação de APIs para geração de Pix e QR Code
-- Persistência de dados com PostgreSQL
-
-## 🛠️ Estrutura do Projeto 
+- Persistência de dados com PostgreSQL/H2
