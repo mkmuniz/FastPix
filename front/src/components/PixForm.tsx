@@ -3,6 +3,26 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { pixService } from '../api/pix.requests';
 
+interface State {
+  id: number;
+  sigla: string;
+  nome: string;
+}
+
+interface City {
+  id: number;
+  nome: string;
+  municipio: {
+    microrregiao: {
+      mesorregiao: {
+        UF: {
+          sigla: string;
+        }
+      }
+    }
+  }
+}
+
 export default function PixForm() {
   const [formData, setFormData] = useState({
     pixKey: '',
@@ -40,8 +60,6 @@ export default function PixForm() {
       });
 
       const qrCodeResponse = await pixService.generateQRCode(pixResponse.id);
-
-      console.log('QR Code Response:', qrCodeResponse);
 
       setQrCodeData({
         text: qrCodeResponse.qrCodeText,
@@ -110,7 +128,7 @@ export default function PixForm() {
                 required
               >
                 <option value="">Selecione um estado</option>
-                {states.map((state) => (
+                {states.map((state: State) => (
                   <option key={state.id} value={state.sigla}>{state.nome}</option>
                 ))}
               </select>
@@ -127,7 +145,7 @@ export default function PixForm() {
                 required
               >
                 <option value="">Selecione uma cidade</option>
-                {cities.filter((city) => city.municipio.microrregiao.mesorregiao.UF.sigla === formData.state).map((city) => (
+                {cities.filter((city: City) => city.municipio.microrregiao.mesorregiao.UF.sigla === formData.state).map((city: City) => (
                   <option key={city.id} value={city.nome}>{city.nome}</option>
                 ))}
               </select>
