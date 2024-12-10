@@ -30,36 +30,47 @@ public class QrCodeService implements QrCodeServicePort {
     private String generatePixQrCodeText(Pix pix) {
         StringBuilder sb = new StringBuilder();
         
+        // Payload Format Indicator
         sb.append("000201");
         
-        String pixKey = validatePixKey(pix.getPixKey());
+        // Merchant Account Information
+        sb.append("26");
         String merchantAccountInfo = String.format(
             "0014BR.GOV.BCB.PIX01%02d%s",
-            pixKey.length(),
-            pixKey
+            pix.getPixKey().length(),
+            pix.getPixKey()
         );
-        sb.append(String.format("26%02d%s", merchantAccountInfo.length(), merchantAccountInfo));
+        sb.append(String.format("%02d%s", merchantAccountInfo.length(), merchantAccountInfo));
         
+        // Merchant Category Code
+        sb.append("52040000");
+        
+        // Transaction Currency
         sb.append("5303986");
         
+        // Transaction Amount
         DecimalFormat df = new DecimalFormat("0.00");
         String amount = df.format(pix.getValue());
         sb.append(String.format("54%02d%s", amount.length(), amount));
         
+        // Country Code
         sb.append("5802BR");
-
+        
+        // Beneficiary Name
         String receiverName = removeAccents(pix.getName().toUpperCase());
         if (receiverName.length() > 25) {
             receiverName = receiverName.substring(0, 25);
         }
         sb.append(String.format("59%02d%s", receiverName.length(), receiverName));
-
+        
+        // City
         String city = removeAccents(pix.getCity().toUpperCase());
         if (city.length() > 15) {
             city = city.substring(0, 15);
         }
         sb.append(String.format("60%02d%s", city.length(), city));
         
+        // Additional Data Field Template (Campo 62)
         String txId = generateTransactionId();
         sb.append("62")
           .append(String.format("%02d", txId.length() + 4))
@@ -67,6 +78,7 @@ public class QrCodeService implements QrCodeServicePort {
           .append(String.format("%02d", txId.length()))
           .append(txId);
         
+        // CRC16
         sb.append("6304");
         String crc16 = calculateCRC16(sb.toString());
         sb.append(crc16);
@@ -74,38 +86,25 @@ public class QrCodeService implements QrCodeServicePort {
         return sb.toString();
     }
 
-    private String validatePixKey(String pixKey) {
-        if (pixKey == null || pixKey.isEmpty()) {
-            throw new IllegalArgumentException("Chave Pix inválida.");
-        }
-        if (pixKey.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            return pixKey; // E-mail
-        } else if (pixKey.matches("^[0-9]{11}$")) {
-            return "CPF:" + pixKey; // CPF
-        } else if (pixKey.matches("^[0-9]{14}$")) {
-            return "CNPJ:" + pixKey; // CNPJ
-        } else if (pixKey.matches("^\\+55[0-9]{10,11}$")) {
-            return pixKey; // Telefone
-        } else if (pixKey.matches("^[a-zA-Z0-9-]{36}$")) {
-            return pixKey; // Chave aleatória
-        } else {
-            throw new IllegalArgumentException("Formato de chave Pix inválido.");
-        }
-    }
-
-    private String removeAccents(String input) {
-        return Normalizer.normalize(input, Normalizer.Form.NFD)
-                         .replaceAll("[^\\p{ASCII}]", "");
-    }
-
     private String generateTransactionId() {
-        return "***";
+        StringBuilder txId = new StringBuilder();
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        int length = 25;
+        
+        java.security.SecureRandom random = new java.security.SecureRandom();
+        
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(chars.length());
+            txId.append(chars.charAt(index));
+        }
+        
+        return txId.toString();
     }
 
     private String calculateCRC16(String qrCode) {
         int polynom = 0x1021;
         int crc = 0xFFFF;
-
+        
         for (int i = 0; i < qrCode.length(); i++) {
             crc ^= (qrCode.charAt(i) << 8);
             for (int j = 0; j < 8; j++) {
@@ -116,7 +115,7 @@ public class QrCodeService implements QrCodeServicePort {
                 }
             }
         }
-
+        
         return String.format("%04X", crc & 0xFFFF).toUpperCase();
     }
 
@@ -132,5 +131,10 @@ public class QrCodeService implements QrCodeServicePort {
         } catch (Exception e) {
             throw new RuntimeException("Erro ao gerar imagem do QR Code", e);
         }
+    }
+
+    private String removeAccents(String input) {
+        return Normalizer.normalize(input, Normalizer.Form.NFD)
+                         .replaceAll("[^\\p{ASCII}]", "");
     }
 }
