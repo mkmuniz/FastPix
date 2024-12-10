@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { pixService } from '../api/pix.requests';
+import QRCodeDisplay from './QRCodeDisplay';
 
 interface State {
   id: number;
@@ -194,31 +195,7 @@ export default function PixForm() {
         </form>
 
         {qrCodeData.image && (
-          <div className="mt-8 text-center">
-            <div className="mb-4 p-4 bg-gray-50 rounded-lg inline-block">
-              <img
-                src={qrCodeData.image.startsWith('data:image')
-                  ? qrCodeData.image
-                  : `data:image/png;base64,${qrCodeData.image}`}
-                alt="QR Code Pix"
-                className="mx-auto w-48 h-48"
-              />
-            </div>
-            <div className="space-y-2">
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(qrCodeData.text);
-                  toast.success('Código Pix copiado!');
-                }}
-                className="text-sm text-indigo-600 hover:text-indigo-500 font-medium"
-              >
-                Copiar código Pix
-              </button>
-              <p className="text-xs text-gray-500">
-                Use qualquer app de Pix para ler o QR Code ou cole o código copiado
-              </p>
-            </div>
-          </div>
+          <QRCodeDisplay qrCodeData={qrCodeData} />
         )}
       </div>
     </div>
