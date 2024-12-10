@@ -30,10 +30,8 @@ public class QrCodeService implements QrCodeServicePort {
     private String generatePixQrCodeText(Pix pix) {
         StringBuilder sb = new StringBuilder();
 
-        // Payload Format Indicator
         sb.append("000201");
 
-        // Merchant Account Information
         sb.append("26");
         String merchantAccountInfo = String.format(
                 "0014BR.GOV.BCB.PIX01%02d%s",
@@ -41,35 +39,29 @@ public class QrCodeService implements QrCodeServicePort {
                 pix.getPixKey());
         sb.append(String.format("%02d%s", merchantAccountInfo.length(), merchantAccountInfo));
 
-        // Merchant Category Code
         sb.append("52040000");
 
-        // Transaction Currency
         sb.append("5303986");
 
-        // Transaction Amount
         DecimalFormat df = new DecimalFormat("0.00");
         String amount = df.format(pix.getValue());
         sb.append(String.format("54%02d%s", amount.length(), amount));
 
-        // Country Code
         sb.append("5802BR");
 
-        // Beneficiary Name
         String receiverName = removeAccents(pix.getName().toUpperCase());
-        if (receiverName.length() > 25) {
+
+        if (receiverName.length() > 25)
             receiverName = receiverName.substring(0, 25);
-        }
+
         sb.append(String.format("59%02d%s", receiverName.length(), receiverName));
 
-        // City
         String city = removeAccents(pix.getCity().toUpperCase());
         if (city.length() > 15) {
             city = city.substring(0, 15);
         }
         sb.append(String.format("60%02d%s", city.length(), city));
 
-        // Additional Data Field Template (Campo 62) for dynamic QR
         String txId = generateTransactionId();
         sb.append("62");
         String gui = "br.gov.bcb.pix";
@@ -79,7 +71,6 @@ public class QrCodeService implements QrCodeServicePort {
                 txId.length(), txId);
         sb.append(String.format("%02d%s", additionalData.length(), additionalData));
 
-        // CRC16
         sb.append("6304");
         String crc16 = calculateCRC16(sb.toString());
         sb.append(crc16);
