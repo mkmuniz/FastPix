@@ -102,11 +102,13 @@ export default function PixForm() {
             <label className="block text-sm font-medium text-gray-700">
               Nome do beneficiário
             </label>
-            <textarea
+            <input
+              type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               placeholder="Nome do beneficiário"
+              required
             />
           </div>
 
