@@ -138,9 +138,11 @@ export default function PixForm() {
                 required
               >
                 <option value="">Selecione um estado</option>
-                {states.map((state: State) => (
-                  <option key={state.id} value={state.sigla}>{state.nome}</option>
-                ))}
+                {states
+                  .sort((a: State, b: State) => a.nome.localeCompare(b.nome))
+                  .map((state: State) => (
+                    <option key={state.id} value={state.sigla}>{state.nome}</option>
+                  ))}
               </select>
             </div>
 
@@ -155,9 +157,12 @@ export default function PixForm() {
                 required
               >
                 <option value="">Selecione uma cidade</option>
-                {cities.filter((city: City) => city.municipio.microrregiao.mesorregiao.UF.sigla === formData.state).map((city: City) => (
-                  <option key={city.id} value={city.nome}>{city.nome}</option>
-                ))}
+                {cities
+                  .filter((city: City) => city.municipio.microrregiao.mesorregiao.UF.sigla === formData.state)
+                  .sort((a: State, b: State) => a.nome.localeCompare(b.nome))
+                  .map((city: City) => (
+                    <option key={city.id} value={city.nome}>{city.nome}</option>
+                  ))}
               </select>
             </div>
 
