@@ -27,7 +27,7 @@ export default function PixForm() {
   const [formData, setFormData] = useState({
     pixKey: '',
     value: '',
-    description: '',
+    name: '',
     userId: '1',
     state: '',
     city: ''
@@ -53,7 +53,7 @@ export default function PixForm() {
       const pixResponse = await pixService.createPix({
         pixKey: formData.pixKey,
         value: parseFloat(formData.value),
-        description: formData.description || '',
+        name: formData.name || '',
         userId: parseInt(formData.userId),
         state: formData.state,
         city: formData.city
@@ -171,8 +171,8 @@ export default function PixForm() {
                 Descrição
               </label>
               <textarea
-                value={formData.description}
-                onChange={(e) => setFormData({...formData, description: e.target.value})}
+                value={formData.name}
+                onChange={(e) => setFormData({...formData, name: e.target.value})}
                 className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="Descrição da cobrança (opcional)"
                 rows={3}
