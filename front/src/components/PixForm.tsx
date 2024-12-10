@@ -47,6 +47,10 @@ export default function PixForm() {
       return;
     }
 
+    if (/^\d{11}$/.test(formData.pixKey)) {
+      formData.pixKey = `+55${formData.pixKey}`;
+    }
+
     try {
       setLoading(true);
 
