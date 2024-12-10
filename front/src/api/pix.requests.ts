@@ -5,7 +5,6 @@ interface CreatePixRequest {
   value: number;
   name: string;
   pixKey: string;
-  userId: number;
   state: string;
   city: string;
 }
@@ -16,6 +15,8 @@ interface PixResponse {
   name: string;
   status: string;
   createdAt: string;
+  qrCodeText: string;
+  qrCodeImage: string;
 }
 
 export const pixService = {

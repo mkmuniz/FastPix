@@ -41,7 +41,7 @@ export default function PixForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.pixKey || !formData.value || !formData.userId) {
+    if (!formData.pixKey || !formData.value) {
       toast.error('Por favor, preencha todos os campos obrigatórios');
       return;
     }
@@ -53,7 +53,6 @@ export default function PixForm() {
         pixKey: formData.pixKey,
         value: parseFloat(formData.value),
         name: formData.name || '',
-        userId: parseInt(formData.userId),
         state: formData.state,
         city: formData.city
       });
