@@ -25,10 +25,9 @@ interface City {
 
 export default function PixForm() {
   const [formData, setFormData] = useState({
+    name: '',
     pixKey: '',
     value: '',
-    name: '',
-    userId: '1',
     state: '',
     city: ''
   });
@@ -41,7 +40,7 @@ export default function PixForm() {
   const [cities, setCities] = useState([]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.pixKey || !formData.value || !formData.userId) {
       toast.error('Por favor, preencha todos os campos obrigatórios');
       return;
@@ -49,7 +48,7 @@ export default function PixForm() {
 
     try {
       setLoading(true);
-      
+
       const pixResponse = await pixService.createPix({
         pixKey: formData.pixKey,
         value: parseFloat(formData.value),
@@ -59,13 +58,11 @@ export default function PixForm() {
         city: formData.city
       });
 
-      const qrCodeResponse = await pixService.generateQRCode(pixResponse.id);
-
       setQrCodeData({
-        text: qrCodeResponse.qrCodeText,
-        image: qrCodeResponse.qrCodeImage
+        text: pixResponse.qrCodeText,
+        image: pixResponse.qrCodeImage
       });
-      
+
       toast.success('Pix criado e QR Code gerado com sucesso!');
     } catch (error) {
       toast.error('Erro ao processar sua solicitação');
@@ -81,7 +78,7 @@ export default function PixForm() {
 
     setStates(data);
   }
-  
+
   const getCities = async () => {
     const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/distritos');
     const data = await response.json();
@@ -102,6 +99,18 @@ export default function PixForm() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Nome do beneficiário
+            </label>
+            <textarea
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              placeholder="Nome do beneficiário"
+            />
+          </div>
+
           <div className="grid grid-cols-1 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -110,7 +119,7 @@ export default function PixForm() {
               <input
                 type="text"
                 value={formData.pixKey}
-                onChange={(e) => setFormData({...formData, pixKey: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, pixKey: e.target.value })}
                 className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="Digite a chave Pix"
                 required
@@ -123,7 +132,7 @@ export default function PixForm() {
               </label>
               <select
                 value={formData.state}
-                onChange={(e) => setFormData({...formData, state: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                 className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 required
               >
@@ -140,7 +149,7 @@ export default function PixForm() {
               </label>
               <select
                 value={formData.city}
-                onChange={(e) => setFormData({...formData, city: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                 className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 required
               >
@@ -159,23 +168,10 @@ export default function PixForm() {
                 type="number"
                 step="0.01"
                 value={formData.value}
-                onChange={(e) => setFormData({...formData, value: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, value: e.target.value })}
                 className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="0,00"
                 required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Descrição
-              </label>
-              <textarea
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-                className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                placeholder="Descrição da cobrança (opcional)"
-                rows={3}
               />
             </div>
           </div>
@@ -195,8 +191,8 @@ export default function PixForm() {
           <div className="mt-8 text-center">
             <div className="mb-4 p-4 bg-gray-50 rounded-lg inline-block">
               <img
-                src={qrCodeData.image.startsWith('data:image') 
-                  ? qrCodeData.image 
+                src={qrCodeData.image.startsWith('data:image')
+                  ? qrCodeData.image
                   : `data:image/png;base64,${qrCodeData.image}`}
                 alt="QR Code Pix"
                 className="mx-auto w-48 h-48"
