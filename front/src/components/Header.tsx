@@ -2,7 +2,7 @@ import { BsCashStack } from 'react-icons/bs';
 
 export default function Header() {
   return (
-    <section className="h-screen bg-indigo-600 text-white overflow-hidden flex items-center justify-center">
+    <section className="h-screen bg-purple-600 text-white overflow-hidden flex items-center justify-center">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <div 

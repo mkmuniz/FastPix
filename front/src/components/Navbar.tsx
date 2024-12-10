@@ -15,16 +15,7 @@ export default function Navbar() {
                 height={32}
                 className="w-8 h-8"
               />
-              <span className="text-2xl font-bold text-indigo-600">FastPix</span>
-            </Link>
-          </div>
-          
-          <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <Link 
-              href="/"
-              className="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium"
-            >
-              Início
+              <span className="text-2xl font-bold text-purple-600">FastPix</span>
             </Link>
           </div>
         </div>
