@@ -4,7 +4,7 @@ interface ApiErrorResponse {
   message: string;
 }
 
-const API_BASE_URL = 'https://fast-pix.onrender.com';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
