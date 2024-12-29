@@ -47,7 +47,7 @@ export default function PixForm() {
       return;
     }
 
-    if (/^\d{11}$/.test(formData.pixKey)) {
+    if (/^\b\d{8,15}\b$/.test(formData.pixKey)) {
       formData.pixKey = `+55${formData.pixKey}`;
     }
 
