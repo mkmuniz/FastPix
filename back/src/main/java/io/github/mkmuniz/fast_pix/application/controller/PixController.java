@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/pix")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"http://localhost:3000", "https://fast-pix.vercel.app"})
 @AllArgsConstructor
 public class PixController {
 
