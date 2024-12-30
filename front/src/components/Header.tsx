@@ -20,7 +20,7 @@ export default function Header() {
             className="mt-3 max-w-md mx-auto text-xl text-indigo-100 sm:text-2xl md:mt-5 md:max-w-3xl animate-fade-in-up"
             style={{ animationDelay: '0.3s' }}
           >
-            Pagamentos instantâneos de forma simples e rápida
+            Gerando QRCode Pix de forma simples e rápida
           </p>
         </div>
       </div>
