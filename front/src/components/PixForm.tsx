@@ -24,9 +24,12 @@ interface City {
   }
 }
 
+type PixKeyType = 'email' | 'phone' | 'document' | '';
+
 export default function PixForm() {
   const [formData, setFormData] = useState({
     name: '',
+    pixKeyType: '' as PixKeyType,
     pixKey: '',
     value: '',
     state: '',
@@ -39,23 +42,43 @@ export default function PixForm() {
   const [loading, setLoading] = useState(false);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+
+  const validatePixKey = (type: PixKeyType, value: string): boolean => {
+    switch (type) {
+      case 'email':
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      case 'phone':
+        return /^\d{11}$/.test(value);
+      case 'document':
+        return /^\d{11}$|^\d{14}$/.test(value);
+      default:
+        return false;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.pixKey || !formData.value) {
+    if (!formData.pixKeyType || !formData.pixKey || !formData.value) {
       toast.error('Por favor, preencha todos os campos obrigatórios');
       return;
     }
 
-    if (/^\b\d{8,15}\b$/.test(formData.pixKey)) {
-      formData.pixKey = `+55${formData.pixKey}`;
+    if (!validatePixKey(formData.pixKeyType, formData.pixKey)) {
+      toast.error('Formato de chave PIX inválido');
+      return;
     }
 
     try {
       setLoading(true);
+      let formattedPixKey = formData.pixKey;
+
+      if (formData.pixKeyType === 'phone') {
+        formattedPixKey = `+55${formData.pixKey}`;
+      }
 
       const pixResponse = await pixService.createPix({
-        pixKey: formData.pixKey,
+        pixKey: formattedPixKey,
         value: parseFloat(formData.value),
         name: formData.name || '',
         state: formData.state,
@@ -73,6 +96,19 @@ export default function PixForm() {
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const getPixKeyPlaceholder = () => {
+    switch (formData.pixKeyType) {
+      case 'email':
+        return 'exemplo@email.com';
+      case 'phone':
+        return '11999999999';
+      case 'document':
+        return 'CPF/CNPJ (apenas números)';
+      default:
+        return 'Selecione o tipo de chave primeiro';
     }
   };
 
@@ -120,14 +156,53 @@ export default function PixForm() {
           <div className="grid grid-cols-1 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">
+                Tipo de Chave Pix *
+              </label>
+              <div className="mt-2 space-x-4">
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    value="email"
+                    checked={formData.pixKeyType === 'email'}
+                    onChange={(e) => setFormData({ ...formData, pixKeyType: e.target.value as PixKeyType, pixKey: '' })}
+                    className="form-radio h-4 w-4 text-indigo-600"
+                  />
+                  <span className="ml-2">E-mail</span>
+                </label>
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    value="phone"
+                    checked={formData.pixKeyType === 'phone'}
+                    onChange={(e) => setFormData({ ...formData, pixKeyType: e.target.value as PixKeyType, pixKey: '' })}
+                    className="form-radio h-4 w-4 text-indigo-600"
+                  />
+                  <span className="ml-2">Celular</span>
+                </label>
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    value="document"
+                    checked={formData.pixKeyType === 'document'}
+                    onChange={(e) => setFormData({ ...formData, pixKeyType: e.target.value as PixKeyType, pixKey: '' })}
+                    className="form-radio h-4 w-4 text-indigo-600"
+                  />
+                  <span className="ml-2">CPF/CNPJ</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
                 Chave Pix *
               </label>
               <input
-                type="text"
+                type={formData.pixKeyType === 'email' ? 'email' : 'text'}
                 value={formData.pixKey}
                 onChange={(e) => setFormData({ ...formData, pixKey: e.target.value })}
                 className="mt-1 block w-full text-black rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                placeholder="Digite a chave Pix"
+                placeholder={getPixKeyPlaceholder()}
+                disabled={!formData.pixKeyType}
                 required
               />
             </div>
