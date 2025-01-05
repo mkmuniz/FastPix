@@ -55,7 +55,6 @@ public class QrCodeServiceTest {
 
         assertNotNull(result);
         String qrCodeText = result.getText();
-        System.out.println("QR Code Text: " + qrCodeText);
         
         String name = qrCodeText.substring(qrCodeText.indexOf("59") + 4, qrCodeText.indexOf("60")).trim();
         assertEquals("MARIA FERNANDA RODRIGUES", name);
