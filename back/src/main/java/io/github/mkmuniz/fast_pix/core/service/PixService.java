@@ -5,6 +5,7 @@ import io.github.mkmuniz.fast_pix.core.ports.out.PixRepositoryPort;
 import io.github.mkmuniz.fast_pix.core.domain.Pix;
 import io.github.mkmuniz.fast_pix.core.domain.QrCode;
 import io.github.mkmuniz.fast_pix.core.ports.in.QrCodeServicePort;
+import io.github.mkmuniz.fast_pix.core.exception.PixNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,12 @@ public class PixService implements PixServicePort {
 
     @Override
     public Optional<Pix> getPixById(Long id) {
-        return pixRepository.findById(id);
+        Optional<Pix> pix = pixRepository.findById(id);
+        
+        if (pix.isEmpty())
+            throw new PixNotFoundException("Pix not found with id: " + id);
+
+        return pix;
     }
 
     @Override

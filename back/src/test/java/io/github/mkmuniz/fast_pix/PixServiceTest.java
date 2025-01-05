@@ -5,10 +5,12 @@ import io.github.mkmuniz.fast_pix.core.domain.QrCode;
 import io.github.mkmuniz.fast_pix.core.ports.out.PixRepositoryPort;
 import io.github.mkmuniz.fast_pix.core.ports.in.QrCodeServicePort;
 import io.github.mkmuniz.fast_pix.core.service.PixService;
+import io.github.mkmuniz.fast_pix.core.exception.PixNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.DisplayName;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -58,7 +60,8 @@ public class PixServiceTest {
     }
 
     @Test
-    void testfindAllPix_ItShouldReturnAllPix() {
+    @DisplayName("It should return all pix")
+    void testfindAllPix() {
         when(pixRepository.findAll()).thenReturn(pixList);
 
         List<Pix> result = pixService.getPix();
@@ -69,7 +72,8 @@ public class PixServiceTest {
     }
 
     @Test
-    void testFindAllPix_ItShouldReturnAnEmptyList() {
+    @DisplayName("It should return an empty list")
+    void testFindAllPix_EmptyList() {
         when(pixRepository.findAll()).thenReturn(Arrays.asList());
 
         List<Pix> result = pixService.getPix();
@@ -78,8 +82,8 @@ public class PixServiceTest {
     }
 
     @Test
-    void testCreatePix_ItShouldReturnPixCreated() {
-        // Arrange
+    @DisplayName("It should return pix created")
+    void testCreatePix() {
         Pix inputPix = new Pix.Builder()
             .withPixKey("teste1@email.com")
             .withValue(new BigDecimal("100.00"))
@@ -115,5 +119,23 @@ public class PixServiceTest {
         assertEquals(expectedPix.getState(), result.getState());
         assertEquals(expectedPix.getQrCodeText(), result.getQrCodeText());
         assertEquals(expectedPix.getQrCodeImage(), result.getQrCodeImage());
+    }
+
+    @Test
+    @DisplayName("It should return pix not found")
+    void testFindPixById_NotFound() {
+        when(pixRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+
+        assertThrows(PixNotFoundException.class, () -> pixService.getPixById(1L));
+    }
+
+    @Test
+    @DisplayName("It should return pix found")
+    void testFindPixById_Found() {
+        when(pixRepository.findById(any(Long.class))).thenReturn(Optional.of(pixList.get(0)));
+
+        Optional<Pix> result = pixService.getPixById(1L);
+
+        assertTrue(result.isPresent());
     }
 }
