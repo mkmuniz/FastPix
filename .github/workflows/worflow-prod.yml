@@ -11,7 +11,8 @@ on:
       - 'back/**'
 
 jobs:
-  test:
+  build-and-test:
+    name: Build and Test FastPix API
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -27,7 +28,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Build and Test with Maven
+    - name: Build and Test
       run: mvn -B test --file pom.xml
 
     - name: Upload Test Results
