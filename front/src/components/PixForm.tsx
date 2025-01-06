@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { pixService } from '../api/pix.requests';
-import QRCodeDisplay from './QRCodeDisplay';
 
 interface State {
   id: number;
@@ -38,10 +37,6 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
     value: '',
     state: '',
     city: ''
-  });
-  const [qrCodeData, setQrCodeData] = useState({
-    text: '',
-    image: ''
   });
   const [loading, setLoading] = useState(false);
   const [states, setStates] = useState([]);

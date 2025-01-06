@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { BsCashStack } from 'react-icons/bs';
 
 export default function Header() {
   return (
