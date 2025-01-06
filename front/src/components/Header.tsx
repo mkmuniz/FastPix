@@ -1,26 +1,28 @@
+import Image from 'next/image';
 import { BsCashStack } from 'react-icons/bs';
 
 export default function Header() {
   return (
-    <section className="h-screen bg-purple-600 text-white overflow-hidden flex items-center justify-center">
+    <section className="bg-gray-900 text-white py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <div 
-            className="animate-bounce mb-6"
-            style={{ animationDuration: '2s' }}
-          >
-            <BsCashStack className="mx-auto text-6xl text-indigo-200" />
+          <div className="mb-6">
+            <Image
+              src="/pix-logo.png" 
+              alt="Logo Pix" 
+              width={100}
+              height={100}
+              className="h-full mx-auto"
+            />
           </div>
-          <h1 
-            className="text-4xl font-extrabold sm:text-5xl md:text-6xl animate-fade-in-down"
-          >
-            FastPix
+          
+          <h1 className="text-4xl font-extrabold sm:text-5xl md:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-green-500">
+            Gere e personalize QRCode Pix
           </h1>
-          <p 
-            className="mt-3 max-w-md mx-auto text-xl text-indigo-100 sm:text-2xl md:mt-5 md:max-w-3xl animate-fade-in-up"
-            style={{ animationDelay: '0.3s' }}
-          >
-            Gerando QRCode Pix de forma simples e rápida
+          
+          <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-300">
+            Crie QR Codes PIX de forma rápida e segura para suas cobranças. 
+            Personalize com seus dados e gere códigos prontos para impressão.
           </p>
         </div>
       </div>
