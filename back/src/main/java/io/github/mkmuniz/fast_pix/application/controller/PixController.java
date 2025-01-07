@@ -6,8 +6,10 @@ import io.github.mkmuniz.fast_pix.core.service.PixService;
 import io.github.mkmuniz.fast_pix.application.mapper.PixMapper;
 import io.github.mkmuniz.fast_pix.application.entity.PixEntity;
 import io.github.mkmuniz.fast_pix.application.dto.PixDTO;
+import io.github.mkmuniz.fast_pix.application.dto.ErrorResponse;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,16 +27,33 @@ public class PixController {
     private final PixMapper pixMapper;
 
     @PostMapping
-    public ResponseEntity<Pix> createPix(@RequestBody PixDTO request) {
-        Pix pix = pixService.createPix(pixMapper.toDomain(request));
+    public ResponseEntity<?> createPix(@RequestBody PixDTO request) {
+        try {
+            Pix pix = pixService.createPix(pixMapper.toDomain(request));
 
-        return ResponseEntity.ok(pix);
+            return ResponseEntity.ok(pix);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        } catch (Exception e) {
+            ErrorResponse errorResponse = new ErrorResponse("Ocorreu um erro inesperado: " + e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Pix>> getPixById(@PathVariable Long id) {
-        Optional<Pix> pix = pixService.getPixById(id);
+        try {
+            Optional<Pix> pix = pixService.getPixById(id);
+
+            return ResponseEntity.ok(pix);
+        } catch (Exception e) {
+            ErrorResponse errorResponse = new ErrorResponse("Erro Interno: " + e.getMessage());
+
+            return ResponseEntity.Status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
         
-        return ResponseEntity.ok(pix);
     }
 }
