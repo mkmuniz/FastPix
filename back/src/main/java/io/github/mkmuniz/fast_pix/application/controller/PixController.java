@@ -44,16 +44,15 @@ public class PixController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Pix>> getPixById(@PathVariable Long id) {
+    public ResponseEntity<?> getPixById(@PathVariable Long id) {
         try {
             Optional<Pix> pix = pixService.getPixById(id);
 
             return ResponseEntity.ok(pix);
         } catch (Exception e) {
-            ErrorResponse errorResponse = new ErrorResponse("Erro Interno: " + e.getMessage());
+            ErrorResponse errorResponse = new ErrorResponse("Ocorreu um erro inesperado: " + e.getMessage());
 
-            return ResponseEntity.Status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
-        
     }
 }
