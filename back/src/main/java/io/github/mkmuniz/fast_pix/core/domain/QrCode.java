@@ -23,11 +23,13 @@ public class QrCode {
 
         public Builder withText(String text) {
             qrCode.text = text;
+
             return this;
         }
 
         public Builder withImage(String image) {
             qrCode.image = image;
+            
             return this;
         }
 

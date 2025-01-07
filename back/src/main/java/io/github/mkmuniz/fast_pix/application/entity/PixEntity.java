@@ -53,13 +53,12 @@ public class PixEntity {
     @Column(name = "confirmed_at")
     private LocalDateTime confirmedAt;
 
-    @Column(nullable = false)
+    @Column
     private String city;
 
-    @Column(nullable = false)
+    @Column
     private String state;
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }

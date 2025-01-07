@@ -19,10 +19,13 @@ export default function QRCodeDisplay({ qrCodeData }: QRCodeDisplayProps) {
   const handleDownloadQRCode = () => {
     if (qrCodeData?.image) {
       const link = document.createElement('a');
+      
       link.href = qrCodeData.image;
       link.download = 'qrcode-pix.png';
+
       document.body.appendChild(link);
       link.click();
+
       document.body.removeChild(link);
       toast.success('QR Code baixado!');
     }
