@@ -141,7 +141,7 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-300">
-              Nome do beneficiário
+              Nome do beneficiário *
             </label>
             <input
               type="text"
@@ -209,13 +209,12 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-gray-300">
-                Estado *
+                Estado
               </label>
               <select
                 value={formData.state}
                 onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                 className="mt-1 block w-full bg-gray-700 text-white rounded-md p-3 border-gray-600 focus:border-green-500 focus:ring-green-500"
-                required
               >
                 <option value="">Selecione um estado</option>
                 {states
@@ -228,13 +227,12 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-gray-300">
-                Cidade *
+                Cidade
               </label>
               <select
                 value={formData.city}
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                 className="mt-1 block w-full bg-gray-700 text-white rounded-md p-3 border-gray-600 focus:border-green-500 focus:ring-green-500"
-                required
               >
                 <option value="">Selecione uma cidade</option>
                 {cities
