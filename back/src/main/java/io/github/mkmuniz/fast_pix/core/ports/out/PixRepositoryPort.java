@@ -9,6 +9,4 @@ public interface PixRepositoryPort {
     Pix createPix(Pix pix);
 
     Optional<Pix> findById(Long id);
-
-    List<Pix> findAll();
 }

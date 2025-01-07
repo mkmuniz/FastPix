@@ -27,18 +27,14 @@ public class PixController {
     @PostMapping
     public ResponseEntity<Pix> createPix(@RequestBody PixDTO request) {
         Pix pix = pixService.createPix(pixMapper.toDomain(request));
-        return ResponseEntity.ok(pix);
-    }
 
-    @GetMapping
-    public ResponseEntity<List<Pix>> getPix() {
-        List<Pix> pix = pixService.getPix();
         return ResponseEntity.ok(pix);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Pix>> getPixById(@PathVariable Long id) {
         Optional<Pix> pix = pixService.getPixById(id);
+        
         return ResponseEntity.ok(pix);
     }
 }

@@ -45,9 +45,4 @@ public class PixService implements PixServicePort {
 
         return pix;
     }
-
-    @Override
-    public List<Pix> getPix() {
-        return pixRepository.findAll();
-    }
 }

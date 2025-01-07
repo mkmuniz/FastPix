@@ -60,28 +60,6 @@ public class PixServiceTest {
     }
 
     @Test
-    @DisplayName("It should return all pix")
-    void testfindAllPix() {
-        when(pixRepository.findAll()).thenReturn(pixList);
-
-        List<Pix> result = pixService.getPix();
-
-        assertEquals(pixList, result);
-        assertEquals(2, result.size());
-        assertNotNull(result);
-    }
-
-    @Test
-    @DisplayName("It should return an empty list")
-    void testFindAllPix_EmptyList() {
-        when(pixRepository.findAll()).thenReturn(Arrays.asList());
-
-        List<Pix> result = pixService.getPix();
-
-        assertEquals(0, result.size());
-    }
-
-    @Test
     @DisplayName("It should return pix created")
     void testCreatePix() {
         Pix inputPix = new Pix.Builder()

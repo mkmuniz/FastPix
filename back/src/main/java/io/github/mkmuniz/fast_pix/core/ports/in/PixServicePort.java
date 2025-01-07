@@ -14,6 +14,4 @@ public interface PixServicePort {
      */
     
     Optional<Pix> getPixById(Long id);
-
-    List<Pix> getPix();
 }

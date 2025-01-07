@@ -32,9 +32,4 @@ public class PixRepositoryAdapter implements PixRepositoryPort {
     public Optional<Pix> findById(Long id) {
         return pixRepository.findById(id).map(pixMapper::toDomain);
     }
-
-    @Override
-    public List<Pix> findAll() {
-        return pixRepository.findAll().stream().map(pixMapper::toDomain).collect(Collectors.toList());
-    }
 }
