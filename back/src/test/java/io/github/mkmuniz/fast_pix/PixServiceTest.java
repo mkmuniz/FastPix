@@ -100,6 +100,38 @@ public class PixServiceTest {
     }
 
     @Test
+    @DisplayName("It should return error for pix without key")
+    void testCreatePix_ErrorPixKey() {
+        try {
+            Pix inputPix = new Pix.Builder()
+                .withValue(new BigDecimal("100.00"))
+                .withName("João Silva")
+                .withCity("São Paulo")
+                .withState("SP")
+                .build();
+            
+        } catch (Exception e) {
+            assertEquals("Chave Pix é obrigatória", e.getMessage());
+        };
+    }
+
+    @Test
+    @DisplayName("It should return error for pix without a value")
+    void testCreatePix_ErrorPixValue() {
+        try {
+            Pix inputPix = new Pix.Builder()
+                .withPixKey("teste1@email.com")
+                .withName("João Silva")
+                .withCity("São Paulo")
+                .withState("SP")
+                .build();
+            
+        } catch (Exception e) {
+            assertEquals("Valor do Pix é obrigatório e deve ser maior que zero", e.getMessage());
+        };
+    }
+
+    @Test
     @DisplayName("It should return pix not found")
     void testFindPixById_NotFound() {
         when(pixRepository.findById(any(Long.class))).thenReturn(Optional.empty());
