@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/pix")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "${app.cors.allowed-origins}")
 @AllArgsConstructor
 public class PixController {
 
