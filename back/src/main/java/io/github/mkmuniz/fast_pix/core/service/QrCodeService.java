@@ -56,11 +56,13 @@ public class QrCodeService implements QrCodeServicePort {
 
         sb.append(String.format("59%02d%s", receiverName.length(), receiverName));
 
-        String city = removeAccents(pix.getCity().toUpperCase());
-        if (city.length() > 15) {
+        String city = pix.getCity() != "" || pix.getCity() != null ? removeAccents(pix.getCity().toUpperCase()) : "NAO INFORMADO";
+
+        if (city.length() > 15) 
             city = city.substring(0, 15);
-        }
+            
         sb.append(String.format("60%02d%s", city.length(), city));
+
 
         String txId = generateTransactionId();
         sb.append("62");

@@ -25,6 +25,7 @@ public class PixRepositoryAdapter implements PixRepositoryPort {
     @Override
     public Pix createPix(Pix pix) {
         PixEntity newPix = pixRepository.save(pixMapper.toEntity(pix));
+        
         return pixMapper.toDomain(newPix);
     }
 
