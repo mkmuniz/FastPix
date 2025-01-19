@@ -1,10 +1,12 @@
 "use client"
 
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 import { pixService } from '../api/pix.requests';
-import { StateType, CityType, PixKeyType, PixFormProps } from '@/types/form.types';
+import { StateType, CityType, PixKeyType, PixFormProps } from '../types/form.types';
+import { getLocations } from '../api/forms.requests';
 
 export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
   const [formData, setFormData] = useState({
@@ -87,23 +89,17 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
     }
   };
 
-  const getStates = async () => {
-    const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados');
-    const data = await response.json();
-
-    setStates(data);
-  }
-
-  const getCities = async () => {
-    const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/distritos');
-    const data = await response.json();
-
-    setCities(data);
-  }
-
+  const fetchData = async () => {
+    const [statesData, citiesData] = await Promise.all([
+      getLocations('estados'),
+      getLocations('distritos')
+    ]);
+    setStates(statesData);
+    setCities(citiesData);
+  };
+  
   useEffect(() => {
-    getStates();
-    getCities();
+    fetchData();
   }, []);
 
   const generateStates = () => {

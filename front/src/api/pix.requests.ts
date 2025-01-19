@@ -1,33 +1,14 @@
 import { api, handleApiError } from './request.config';
 import { AxiosError } from 'axios';
-
-interface CreatePixRequest {
-  value: number;
-  name: string;
-  pixKey: string;
-  state: string;
-  city: string;
-}
-
-interface PixResponse {
-  id: string;
-  value: number;
-  name: string;
-  status: string;
-  createdAt: string;
-  qrCodeText: string;
-  qrCodeImage: string;
-}
+import { CreatePixRequestTypes, PixResponseTypes } from '@/types/requests.types';
 
 export const pixService = {
-  async createPix(data: CreatePixRequest): Promise<PixResponse> {
+  async createPix(data: CreatePixRequestTypes): Promise<PixResponseTypes> {
     try {
-      const response = await api.post<PixResponse>('/api/pix', data);
+      const response = await api.post<PixResponseTypes>('/api/pix', data);
       return response.data;
     } catch (error) {
-      if (error instanceof AxiosError) {
-        return handleApiError(error);
-      }
+      if (error instanceof AxiosError) return handleApiError(error);
       throw error;
     }
   },
