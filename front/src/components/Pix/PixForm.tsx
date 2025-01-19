@@ -4,9 +4,9 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-import { pixService } from '../api/pix.requests';
-import { StateType, CityType, PixKeyType, PixFormProps } from '../types/form.types';
-import { getLocations } from '../api/forms.requests';
+import { pixService } from '../../api/pix.requests';
+import { StateType, CityType, PixKeyType, PixFormProps } from '../../types/form.types';
+import { getLocations } from '../../api/forms.requests';
 
 export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
   const [formData, setFormData] = useState({
@@ -51,7 +51,7 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
       setLoading(true);
       let formattedPixKey = formData.pixKey;
 
-      if (formData.pixKeyType === 'phone') formattedPixKey = `+55${formData.pixKey}`;
+      if (formData.pixKeyType === 'phone') formattedPixKey = `+55${formData.pixKey.replace(/[^\d]/g, '')}`;
 
       const pixResponse = await pixService.createPix({
         pixKey: formattedPixKey,
