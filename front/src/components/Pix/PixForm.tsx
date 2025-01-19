@@ -1,11 +1,12 @@
 "use client"
 
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-import { pixService } from '../../api/pix.requests';
-import { StateType, CityType, PixKeyType, PixFormProps } from '../../types/form.types';
-import { getStates, getCities } from '../../api/forms.requests';
+import { pixService } from '../api/pix.requests';
+import { StateType, CityType, PixKeyType, PixFormProps } from '../types/form.types';
+import { getLocations } from '../api/forms.requests';
 
 export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
   const [formData, setFormData] = useState({
@@ -89,14 +90,15 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
   };
 
   const fetchData = async () => {
-    const statesData = await getStates();
-    const citiesData = await getCities();
+    const [statesData, citiesData] = await Promise.all([
+      getLocations('estados'),
+      getLocations('distritos')
+    ]);
     setStates(statesData);
     setCities(citiesData);
   };
   
   useEffect(() => {
-
     fetchData();
   }, []);
 
