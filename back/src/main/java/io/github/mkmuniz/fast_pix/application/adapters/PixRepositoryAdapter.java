@@ -9,8 +9,8 @@ import io.github.mkmuniz.fast_pix.application.repository.PixRepository;
 import io.github.mkmuniz.fast_pix.core.domain.Pix;
 import io.github.mkmuniz.fast_pix.core.ports.out.PixRepositoryPort;
 
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;

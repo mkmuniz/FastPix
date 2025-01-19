@@ -15,7 +15,6 @@ import java.text.DecimalFormat;
 import java.io.ByteArrayOutputStream;
 
 public class QrCodeService implements QrCodeServicePort {
-
     @Override
     public QrCode generateQrCode(Pix pix) {
         String pixCode = generatePixQrCodeText(pix);
@@ -47,14 +46,10 @@ public class QrCodeService implements QrCodeServicePort {
         sb.append("5802BR");
 
         String receiverName = removeAccents(pix.getName().toUpperCase());
-
         if (receiverName.length() > 25) receiverName = receiverName.substring(0, 25);
-
         sb.append(String.format("59%02d%s", receiverName.length(), receiverName));
 
-        String city = pix.getCity() != "" || pix.getCity() != null ? removeAccents(pix.getCity().toUpperCase())
-                : "NAO INFORMADO";
-
+        String city = pix.getCity() != "" || pix.getCity() != null ? removeAccents(pix.getCity().toUpperCase()) : "NAO INFORMADO";
         if (city.length() > 15) city = city.substring(0, 15);
 
         sb.append(String.format("60%02d%s", city.length(), city));

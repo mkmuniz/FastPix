@@ -8,8 +8,8 @@ import io.github.mkmuniz.fast_pix.application.entity.PixEntity;
 import io.github.mkmuniz.fast_pix.application.dto.PixDTO;
 import io.github.mkmuniz.fast_pix.application.dto.ErrorResponse;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
