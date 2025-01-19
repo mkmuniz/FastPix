@@ -18,15 +18,12 @@ import lombok.AllArgsConstructor;
 @Repository
 @AllArgsConstructor
 public class PixRepositoryAdapter implements PixRepositoryPort {
-
     private final PixRepository pixRepository;
     private final PixMapper pixMapper;
 
     @Override
     public Pix createPix(Pix pix) {
-        PixEntity newPix = pixRepository.save(pixMapper.toEntity(pix));
-        
-        return pixMapper.toDomain(newPix);
+        return pixMapper.toDomain(pixRepository.save(pixMapper.toEntity(pix)));
     }
 
     @Override

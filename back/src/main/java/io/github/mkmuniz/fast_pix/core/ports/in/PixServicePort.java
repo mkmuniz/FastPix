@@ -9,9 +9,8 @@ import java.util.Optional;
 public interface PixServicePort {
     Pix createPix(Pix pix);
 
+    Optional<Pix> getPixById(Long id);
     /**
      * @throws PixNotFoundException
      */
-    
-    Optional<Pix> getPixById(Long id);
 }

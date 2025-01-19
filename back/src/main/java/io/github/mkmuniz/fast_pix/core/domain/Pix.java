@@ -73,50 +73,42 @@ public class Pix {
 
         public Builder withId(Long id) {
             pix.id = id;
-
             return this;
         }
 
         public Builder withPixKey(String pixKey) {
             pix.pixKey = pixKey;
-
             return this;
         }
 
         public Builder withValue(BigDecimal value) {
             pix.value = value;
-
             return this;
         }
 
         public Builder withName(String name) {
             pix.name = name;
-
             return this;
         }
 
         public Builder withQrCode(String qrCodeText, String qrCodeImage) {
             pix.qrCodeText = qrCodeText;
             pix.qrCodeImage = qrCodeImage;
-
             return this;
         }
 
         public Builder withCity(String city) {
             pix.city = city;
-
             return this;
         }
 
         public Builder withState(String state) {
             pix.state = state;
-
             return this;
         }
 
         public Builder withStatus(PixStatus status) {
             pix.status = status;
-
             return this;
         }
 
@@ -127,16 +119,12 @@ public class Pix {
 
         public Pix build() {
             validatePix();
-
             return pix;
         }
 
         private void validatePix() {
-            if (pix.pixKey == null || pix.pixKey.trim().isEmpty())
-                throw new IllegalStateException("Chave Pix é obrigatória");
-
-            if (pix.value == null || pix.value.compareTo(BigDecimal.ZERO) <= 0)
-                throw new IllegalStateException("Valor do Pix é obrigatório e deve ser maior que zero");
+            if (pix.pixKey == null || pix.pixKey.trim().isEmpty()) throw new IllegalStateException("Chave Pix é obrigatória");
+            if (pix.value == null || pix.value.compareTo(BigDecimal.ZERO) <= 0) throw new IllegalStateException("Valor do Pix é obrigatório e deve ser maior que zero");
         }
     }
 }

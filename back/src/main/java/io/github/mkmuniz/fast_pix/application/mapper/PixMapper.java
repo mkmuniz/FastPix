@@ -8,9 +8,7 @@ import io.github.mkmuniz.fast_pix.application.entity.PixEntity;
 public class PixMapper {
 
     public Pix toDomain(PixEntity entity) {
-        if (entity == null) {
-            return null;
-        }
+        if (entity == null) return null;
 
         return new Pix.Builder()
                 .withId(entity.getId())
@@ -26,9 +24,7 @@ public class PixMapper {
     }
 
     public Pix toDomain(PixDTO dto) {
-        if (dto == null) {
-            return null;
-        }
+        if (dto == null) return null;
 
         return new Pix.Builder()
                 .withPixKey(dto.getPixKey())
@@ -40,36 +36,40 @@ public class PixMapper {
     }
 
     public PixEntity toEntity(Pix domain) {
-        if (domain == null) {
-            return null;
-        }
+        if (domain == null) return null;
 
         PixEntity entity = new PixEntity();
+
         entity.setId(domain.getId());
+        entity.setName(domain.getName());
         entity.setPixKey(domain.getPixKey());
         entity.setValue(domain.getValue());
-        entity.setName(domain.getName());
         entity.setStatus(domain.getStatus());
+
         entity.setQrCodeText(domain.getQrCodeText());
         entity.setQrCodeImage(domain.getQrCodeImage());
+
         entity.setCreatedAt(domain.getCreatedAt());
         entity.setConfirmedAt(domain.getConfirmedAt());
+
         entity.setCity(domain.getCity());
         entity.setState(domain.getState());
+
         return entity;
     }
 
     public PixDTO toDTO(Pix domain) {
-        if (domain == null) {
-            return null;
-        }
+        if (domain == null) return null;
 
         PixDTO dto = new PixDTO();
+
         dto.setPixKey(domain.getPixKey());
         dto.setValue(domain.getValue());
         dto.setName(domain.getName());
+
         dto.setCity(domain.getCity());
         dto.setState(domain.getState());
+
         return dto;
     }
 }

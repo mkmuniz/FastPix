@@ -1,7 +1,7 @@
 package io.github.mkmuniz.fast_pix.application.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.AllArgsConstructor;
 
 @Getter
 @AllArgsConstructor
