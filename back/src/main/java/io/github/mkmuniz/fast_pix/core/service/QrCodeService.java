@@ -48,16 +48,14 @@ public class QrCodeService implements QrCodeServicePort {
 
         String receiverName = removeAccents(pix.getName().toUpperCase());
 
-        if (receiverName.length() > 25)
-            receiverName = receiverName.substring(0, 25);
+        if (receiverName.length() > 25) receiverName = receiverName.substring(0, 25);
 
         sb.append(String.format("59%02d%s", receiverName.length(), receiverName));
 
         String city = pix.getCity() != "" || pix.getCity() != null ? removeAccents(pix.getCity().toUpperCase())
                 : "NAO INFORMADO";
 
-        if (city.length() > 15)
-            city = city.substring(0, 15);
+        if (city.length() > 15) city = city.substring(0, 15);
 
         sb.append(String.format("60%02d%s", city.length(), city));
 
