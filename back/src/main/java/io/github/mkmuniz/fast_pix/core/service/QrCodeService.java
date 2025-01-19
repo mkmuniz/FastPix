@@ -9,10 +9,10 @@ import io.github.mkmuniz.fast_pix.core.domain.Pix;
 import io.github.mkmuniz.fast_pix.core.domain.QrCode;
 import io.github.mkmuniz.fast_pix.core.ports.in.QrCodeServicePort;
 
-import java.io.ByteArrayOutputStream;
-import java.text.DecimalFormat;
 import java.util.Base64;
 import java.text.Normalizer;
+import java.text.DecimalFormat;
+import java.io.ByteArrayOutputStream;
 
 public class QrCodeService implements QrCodeServicePort {
 
@@ -31,22 +31,19 @@ public class QrCodeService implements QrCodeServicePort {
         StringBuilder sb = new StringBuilder();
 
         sb.append("000201");
-
         sb.append("26");
         String merchantAccountInfo = String.format(
                 "0014BR.GOV.BCB.PIX01%02d%s",
                 pix.getPixKey().length(),
                 pix.getPixKey());
         sb.append(String.format("%02d%s", merchantAccountInfo.length(), merchantAccountInfo));
-
         sb.append("52040000");
-
         sb.append("5303986");
 
         DecimalFormat df = new DecimalFormat("0.00");
         String amount = df.format(pix.getValue());
-        sb.append(String.format("54%02d%s", amount.length(), amount));
 
+        sb.append(String.format("54%02d%s", amount.length(), amount));
         sb.append("5802BR");
 
         String receiverName = removeAccents(pix.getName().toUpperCase());
@@ -56,16 +53,18 @@ public class QrCodeService implements QrCodeServicePort {
 
         sb.append(String.format("59%02d%s", receiverName.length(), receiverName));
 
-        String city = pix.getCity() != "" || pix.getCity() != null ? removeAccents(pix.getCity().toUpperCase()) : "NAO INFORMADO";
+        String city = pix.getCity() != "" || pix.getCity() != null ? removeAccents(pix.getCity().toUpperCase())
+                : "NAO INFORMADO";
 
-        if (city.length() > 15) 
+        if (city.length() > 15)
             city = city.substring(0, 15);
-            
+
         sb.append(String.format("60%02d%s", city.length(), city));
 
-
         String txId = generateTransactionId();
+
         sb.append("62");
+
         String gui = "br.gov.bcb.pix";
         String additionalData = String.format(
                 "01%02d%s05%02d%s",
@@ -74,6 +73,7 @@ public class QrCodeService implements QrCodeServicePort {
         sb.append(String.format("%02d%s", additionalData.length(), additionalData));
 
         sb.append("6304");
+
         String crc16 = calculateCRC16(sb.toString());
         sb.append(crc16);
 
@@ -128,7 +128,8 @@ public class QrCodeService implements QrCodeServicePort {
     }
 
     private String removeAccents(String input) {
-        return Normalizer.normalize(input, Normalizer.Form.NFD)
+        return Normalizer
+                .normalize(input, Normalizer.Form.NFD)
                 .replaceAll("[^\\p{ASCII}]", "");
     }
 }
