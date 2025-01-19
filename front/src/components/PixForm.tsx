@@ -1,33 +1,10 @@
 "use client"
+
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
+
 import { pixService } from '../api/pix.requests';
-
-interface State {
-  id: number;
-  sigla: string;
-  nome: string;
-}
-
-interface City {
-  id: number;
-  nome: string;
-  municipio: {
-    microrregiao: {
-      mesorregiao: {
-        UF: {
-          sigla: string;
-        }
-      }
-    }
-  }
-}
-
-type PixKeyType = 'email' | 'phone' | 'document' | '';
-
-interface PixFormProps {
-  onQrCodeGenerated: (qrCode: { text: string; image: string } | null) => void;
-}
+import { StateType, CityType, PixKeyType, PixFormProps } from '@/types/form.types';
 
 export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
   const [formData, setFormData] = useState({
@@ -72,9 +49,7 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
       setLoading(true);
       let formattedPixKey = formData.pixKey;
 
-      if (formData.pixKeyType === 'phone') {
-        formattedPixKey = `+55${formData.pixKey}`;
-      }
+      if (formData.pixKeyType === 'phone') formattedPixKey = `+55${formData.pixKey}`;
 
       const pixResponse = await pixService.createPix({
         pixKey: formattedPixKey,
@@ -104,7 +79,7 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
       case 'email':
         return 'exemplo@email.com';
       case 'phone':
-        return '11999999999';
+        return '(11) 99999-9999';
       case 'document':
         return 'CPF/CNPJ (apenas números)';
       default:
@@ -130,6 +105,23 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
     getStates();
     getCities();
   }, []);
+
+  const generateStates = () => {
+    return states
+      .sort((a: StateType, b: StateType) => a.nome.localeCompare(b.nome))
+      .map((state: StateType) => (
+        <option key={state.id} value={state.sigla}>{state.nome}</option>
+      ));
+  };
+
+  const generateCities = () => {
+    return cities
+      .filter((city: CityType) => city.municipio.microrregiao.mesorregiao.UF.sigla === formData.state)
+      .sort((a: StateType, b: StateType) => a.nome.localeCompare(b.nome))
+      .map((city: CityType) => (
+        <option key={city.id} value={city.nome}>{city.nome}</option>
+      ))
+  };
 
   return (
     <div className="bg-gray-800 rounded-lg shadow-xl overflow-hidden border border-gray-700">
@@ -217,11 +209,7 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
                 className="mt-1 block w-full bg-gray-700 text-white rounded-md p-3 border-gray-600 focus:border-green-500 focus:ring-green-500"
               >
                 <option value="">Selecione um estado</option>
-                {states
-                  .sort((a: State, b: State) => a.nome.localeCompare(b.nome))
-                  .map((state: State) => (
-                    <option key={state.id} value={state.sigla}>{state.nome}</option>
-                  ))}
+                {generateStates()}
               </select>
             </div>
 
@@ -235,12 +223,7 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
                 className="mt-1 block w-full bg-gray-700 text-white rounded-md p-3 border-gray-600 focus:border-green-500 focus:ring-green-500"
               >
                 <option value="">Selecione uma cidade</option>
-                {cities
-                  .filter((city: City) => city.municipio.microrregiao.mesorregiao.UF.sigla === formData.state)
-                  .sort((a: State, b: State) => a.nome.localeCompare(b.nome))
-                  .map((city: City) => (
-                    <option key={city.id} value={city.nome}>{city.nome}</option>
-                  ))}
+                {generateCities()}
               </select>
             </div>
 
