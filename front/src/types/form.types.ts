@@ -23,3 +23,9 @@ export type PixKeyType = 'email' | 'phone' | 'document' | '';
 export type PixFormProps = {
     onQrCodeGenerated: (qrCode: { text: string; image: string } | null) => void;
 }
+
+export type InputBaseProps = {
+    label: string;
+    required?: boolean;
+    children: React.ReactNode;
+}
