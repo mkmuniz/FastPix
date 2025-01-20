@@ -1,12 +1,16 @@
 "use client"
 
 import React from 'react';
-import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { useEffect, useState } from 'react';
 
 import { pixService } from '../../api/pix.requests';
-import { StateType, CityType, PixKeyType, PixFormProps } from '../../types/form.types';
 import { getLocations } from '../../api/forms.requests';
+
+import { validatePixKey } from '@/utils';
+import { StateType, CityType, PixKeyType, PixFormProps } from '../../types/form.types';
+
+import InputBase from './InputBase';
 
 export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
   const [formData, setFormData] = useState({
@@ -20,19 +24,6 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
   const [loading, setLoading] = useState(false);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-
-  const validatePixKey = (type: PixKeyType, value: string): boolean => {
-    switch (type) {
-      case 'email':
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-      case 'phone':
-        return /^(\(\d{2}\)\s?|\d{2})\s?\d{5}[-\s]?\d{4}$/.test(value);
-      case 'document':
-        return /^\d{11}$|^\d{14}$/.test(value);
-      default:
-        return false;
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,10 +118,7 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-300">
-              Nome do beneficiário *
-            </label>
+          <InputBase label="Nome do beneficiário" required>
             <input
               type="text"
               value={formData.name}
@@ -139,13 +127,10 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
               placeholder="Nome do beneficiário"
               required
             />
-          </div>
+          </InputBase>
 
           <div className="grid grid-cols-1 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-300">
-                Tipo de Chave Pix *
-              </label>
+            <InputBase label="Tipo de Chave Pix" required>
               <div className="mt-2 space-x-4">
                 <label className="inline-flex items-center">
                   <input
@@ -178,12 +163,9 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
                   <span className="ml-2 text-gray-300">CPF/CNPJ</span>
                 </label>
               </div>
-            </div>
+            </InputBase>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-300">
-                Chave Pix *
-              </label>
+            <InputBase label="Chave Pix" required>
               <input
                 type={formData.pixKeyType === 'email' ? 'email' : 'text'}
                 value={formData.pixKey}
@@ -193,12 +175,9 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
                 disabled={!formData.pixKeyType}
                 required
               />
-            </div>
+            </InputBase>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-300">
-                Estado
-              </label>
+            <InputBase label="Estado">
               <select
                 value={formData.state}
                 onChange={(e) => setFormData({ ...formData, state: e.target.value })}
@@ -207,12 +186,9 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
                 <option value="">Selecione um estado</option>
                 {generateStates()}
               </select>
-            </div>
+            </InputBase>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-300">
-                Cidade
-              </label>
+            <InputBase label="Cidade">
               <select
                 value={formData.city}
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
@@ -221,12 +197,9 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
                 <option value="">Selecione uma cidade</option>
                 {generateCities()}
               </select>
-            </div>
+            </InputBase>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-300">
-                Valor (R$) *
-              </label>
+            <InputBase label="Valor (R$)" required>
               <input
                 type="number"
                 step="0.01"
@@ -236,7 +209,7 @@ export default function PixForm({ onQrCodeGenerated }: PixFormProps) {
                 placeholder="0,00"
                 required
               />
-            </div>
+            </InputBase>
           </div>
 
           <div className="flex justify-center">
